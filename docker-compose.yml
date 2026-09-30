@@ -1,0 +1,25 @@
+services:
+  backend:
+    build: ./backend
+    container_name: safety-backend
+    environment:
+      - JWT_SECRET=change-me-in-production
+      - INGEST_KEY=device-key-123
+      - SIMULATE=true
+    volumes:
+      - safety-data:/data
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: safety-frontend
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+volumes:
+  safety-data:
